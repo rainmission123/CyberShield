@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">cybershield</string>
+    <string name="paste_link_here">Paste link here</string>
+    <string name="accessibility_service_description">
+    CyberShield monitors visible links on your screen to warn you about suspicious or phishing websites.
+    </string>
+</resources>

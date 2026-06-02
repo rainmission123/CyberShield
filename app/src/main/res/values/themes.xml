@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Cybershield.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#050816</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.Cybershield</item>
+    </style>
+
+    <style name="Theme.Cybershield" parent="Theme.Material3.DayNight.NoActionBar" />
+
+</resources>

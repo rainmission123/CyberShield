@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#050805">
+
+    <com.jorian.cybershield.view.MatrixRainView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.18" />
+
+    <ScrollView
+        android:id="@+id/warningRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:padding="12dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_matrix_panel"
+            android:padding="22dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="⚠"
+                android:textColor="#FF3B30"
+                android:textSize="44sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:shadowColor="#FF3B30"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="14" />
+
+            <TextView
+                android:id="@+id/tvWarningTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dangerous Link Blocked"
+                android:textColor="#FF3B30"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:fontFamily="monospace"
+                android:shadowColor="#FF3B30"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="12"
+                android:layout_marginTop="12dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CyberShield blocked this link because it may contain phishing or malicious threats."
+                android:textColor="#C6FFD0"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="26dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="18dp"
+                android:background="@drawable/bg_matrix_result">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvPhishingScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Threat Score: 75%"
+                        android:textColor="#FF3B30"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        android:fontFamily="monospace"
+                        android:shadowColor="#FF3B30"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="10" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Realtime cyber threat detected."
+                        android:textColor="#FF9E9E"
+                        android:textSize="14sp"
+                        android:layout_marginTop="10dp" />
+
+                </LinearLayout>
+
+                <com.jorian.cybershield.view.RadarView
+                    android:layout_width="92dp"
+                    android:layout_height="92dp"
+                    android:layout_marginStart="12dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Blocked URL"
+                android:textColor="#00FF41"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvBlockedUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="https://example.com"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textIsSelectable="true"
+                android:background="@drawable/bg_matrix_input"
+                android:padding="16dp"
+                android:maxLines="3"
+                android:ellipsize="end" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Threat Reasons"
+                android:textColor="#00FF41"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="22dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvWarningReasons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Suspicious login keyword"
+                android:textColor="#C6FFD0"
+                android:textSize="14sp"
+                android:background="@drawable/bg_matrix_input"
+                android:padding="16dp" />
+
+            <Button
+                android:id="@+id/btnGoBack"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Go Back"
+                android:textAllCaps="false"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#00FF41"
+                android:background="@drawable/bg_matrix_button"
+                android:layout_marginTop="34dp" />
+
+            <Button
+                android:id="@+id/btnOpenAnyway"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Open Anyway"
+                android:textAllCaps="false"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#FF3B30"
+                android:background="@drawable/bg_matrix_danger"
+                android:layout_marginTop="12dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

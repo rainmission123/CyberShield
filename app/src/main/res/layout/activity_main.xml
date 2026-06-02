@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#010703">
+
+    <com.jorian.cybershield.view.MatrixRainView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.45" />
+
+    <ScrollView
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:fillViewport="true"
+        android:padding="10dp"
+        android:background="@android:color/transparent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="18dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_matrix_panel"
+            android:paddingStart="14dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="☰"
+                android:textColor="#00FF41"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:fontFamily="monospace" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CyberShield"
+                android:textAlignment="center"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                android:textColor="#00FF41"
+                android:shadowColor="#00FF41"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="14"
+                android:layout_marginTop="24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Scan suspicious links before opening."
+                android:textAlignment="center"
+                android:textSize="14sp"
+                android:textColor="#A9FFB0"
+                android:textStyle="bold"
+                android:layout_marginTop="6dp" />
+
+            <EditText
+                android:id="@+id/etUrl"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="Paste link here"
+                android:textColorHint="#63FF78"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:inputType="textUri"
+                android:singleLine="true"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:background="@drawable/bg_matrix_input"
+                android:layout_marginTop="34dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnScan"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="⌕  Scan Link"
+                android:textAllCaps="false"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#B7FFB7"
+                android:backgroundTint="#071B0B"
+                app:strokeColor="#00FF41"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="14dp"
+                android:layout_marginTop="14dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSetDefault"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="▣  Set CyberShield as Link Protector"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#D5FFD9"
+                android:backgroundTint="#06140A"
+                app:strokeColor="#00FF41"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="14dp"
+                android:layout_marginTop="10dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEnableProtection"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="▣  Enable Realtime Protection"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#FF3B30"
+                android:backgroundTint="#100807"
+                app:strokeColor="#FF2A2A"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="14dp"
+                android:layout_marginTop="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="150dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:background="@drawable/bg_matrix_result"
+                android:layout_marginTop="28dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvResult"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Result will appear here."
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#00FF41"
+                        android:fontFamily="monospace"
+                        android:shadowColor="#00FF41"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="8" />
+
+                    <TextView
+                        android:id="@+id/tvReasons"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="13sp"
+                        android:textColor="#9EFFA7"
+                        android:layout_marginTop="10dp" />
+
+                </LinearLayout>
+
+                <com.jorian.cybershield.view.RadarView
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_marginStart="10dp" />
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnHistory"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="View Scan History     ◷"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#00FF41"
+                android:backgroundTint="#041108"
+                app:strokeColor="#00FF41"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="14dp"
+                android:layout_marginTop="24dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

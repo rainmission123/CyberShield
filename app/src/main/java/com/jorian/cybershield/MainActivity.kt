@@ -1,9 +1,14 @@
 package com.jorian.cybershield
 
+import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.Settings
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -86,30 +91,46 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showCyberShieldMenu() {
-        val menuItems = arrayOf(
-            "Scan current link",
-            "View scan history",
-            "Enable realtime protection",
-            "Set as link protector",
-            "Clear current scan",
-            "About CyberShield"
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_cyber_menu)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialog.findViewById<Button>(R.id.menuScan).setOnClickListener {
+            dialog.dismiss()
+            incomingLinkHandler.scanManualInput()
+        }
+
+        dialog.findViewById<Button>(R.id.menuHistory).setOnClickListener {
+            dialog.dismiss()
+            openHistory()
+        }
+
+        dialog.findViewById<Button>(R.id.menuRealtime).setOnClickListener {
+            dialog.dismiss()
+            openAccessibilitySettings()
+        }
+
+        dialog.findViewById<Button>(R.id.menuDefault).setOnClickListener {
+            dialog.dismiss()
+            openDefaultBrowserSettings()
+        }
+
+        dialog.findViewById<Button>(R.id.menuClear).setOnClickListener {
+            dialog.dismiss()
+            clearCurrentScan()
+        }
+
+        dialog.findViewById<Button>(R.id.menuAbout).setOnClickListener {
+            dialog.dismiss()
+            showAboutDialog()
+        }
+
+        dialog.show()
+        dialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
         )
-
-        AlertDialog.Builder(this)
-            .setTitle("CyberShield Menu")
-            .setItems(menuItems) { dialog, which ->
-                dialog.dismiss()
-
-                when (which) {
-                    0 -> incomingLinkHandler.scanManualInput()
-                    1 -> openHistory()
-                    2 -> openAccessibilitySettings()
-                    3 -> openDefaultBrowserSettings()
-                    4 -> clearCurrentScan()
-                    5 -> showAboutDialog()
-                }
-            }
-            .show()
     }
 
     private fun openHistory() {

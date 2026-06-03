@@ -1,6 +1,7 @@
 package com.jorian.cybershield.ui
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -101,9 +102,13 @@ class WarningActivity : Activity() {
         stopAlertEffects()
 
         if (blockedUrl.isNotEmpty()) {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(blockedUrl))
-            startActivity(browserIntent)
-            finish()
+            try {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(blockedUrl))
+                startActivity(browserIntent)
+                finish()
+            } catch (e: ActivityNotFoundException) {
+                tvWarningReasons.append("\nNo browser app is available to open this link.")
+            }
         }
     }
 

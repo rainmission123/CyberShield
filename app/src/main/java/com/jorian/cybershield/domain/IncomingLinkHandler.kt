@@ -1,6 +1,7 @@
 package com.jorian.cybershield.domain
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.widget.EditText
@@ -191,9 +192,14 @@ class IncomingLinkHandler(
     }
 
     private fun openInBrowser(url: String) {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        activity.startActivity(browserIntent)
-        activity.finish()
+        try {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            activity.startActivity(browserIntent)
+            activity.finish()
+        } catch (e: ActivityNotFoundException) {
+            tvResult.text = "SAFE\n${scanner.scan(url).message}"
+            tvReasons.text = "No browser app is available to open this link."
+        }
     }
 
     private fun openWarningPage(

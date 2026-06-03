@@ -34,13 +34,17 @@
             android:paddingBottom="20dp">
 
             <TextView
+                android:id="@+id/tvMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="☰"
                 android:textColor="#00FF41"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:fontFamily="monospace" />
+                android:fontFamily="monospace"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="CyberShield menu" />
 
             <TextView
                 android:layout_width="match_parent"

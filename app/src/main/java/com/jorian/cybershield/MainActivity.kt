@@ -1,11 +1,14 @@
 package com.jorian.cybershield
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jorian.cybershield.domain.IncomingLinkHandler
@@ -17,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnEnableProtection: Button
     private lateinit var btnHistory: Button
     private lateinit var btnSetDefault: Button
+    private lateinit var tvMenu: TextView
     private lateinit var etUrl: EditText
     private lateinit var btnScan: Button
     private lateinit var tvResult: TextView
@@ -33,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         btnEnableProtection = findViewById(R.id.btnEnableProtection)
         btnHistory = findViewById(R.id.btnHistory)
         btnSetDefault = findViewById(R.id.btnSetDefault)
+        tvMenu = findViewById(R.id.tvMenu)
         etUrl = findViewById(R.id.etUrl)
         btnScan = findViewById(R.id.btnScan)
         tvResult = findViewById(R.id.tvResult)
@@ -62,16 +67,87 @@ class MainActivity : AppCompatActivity() {
             openDefaultBrowserSettings()
         }
 
+        tvMenu.setOnClickListener {
+            showCyberShieldMenu()
+        }
+
         incomingLinkHandler.handle(intent)
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        incomingLinkHandler.handle(intent)
+    }
+
+    private fun showCyberShieldMenu() {
+        val menuItems = arrayOf(
+            "Scan current link",
+            "View scan history",
+            "Enable realtime protection",
+            "Set as link protector",
+            "Clear current scan",
+            "About CyberShield"
+        )
+
+        AlertDialog.Builder(this)
+            .setTitle("CyberShield Menu")
+            .setItems(menuItems) { dialog, which ->
+                dialog.dismiss()
+
+                when (which) {
+                    0 -> incomingLinkHandler.scanManualInput()
+                    1 -> openHistory()
+                    2 -> openAccessibilitySettings()
+                    3 -> openDefaultBrowserSettings()
+                    4 -> clearCurrentScan()
+                    5 -> showAboutDialog()
+                }
+            }
+            .show()
+    }
+
+    private fun openHistory() {
+        startActivity(Intent(this, HistoryActivity::class.java))
+    }
+
     private fun openAccessibilitySettings() {
-        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-        startActivity(intent)
+        openSettings(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
     }
 
     private fun openDefaultBrowserSettings() {
-        val intent = Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
-        startActivity(intent)
+        openSettings(Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS))
+    }
+
+    private fun openSettings(intent: Intent) {
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            try {
+                startActivity(Intent(Settings.ACTION_SETTINGS))
+            } catch (fallbackError: ActivityNotFoundException) {
+                Toast.makeText(
+                    this,
+                    "Settings app is not available.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun clearCurrentScan() {
+        etUrl.text?.clear()
+        tvResult.text = "Result will appear here."
+        tvReasons.text = ""
+    }
+
+    private fun showAboutDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("CyberShield")
+            .setMessage(
+                "CyberShield scans suspicious links using local phishing rules and optional VirusTotal cloud scanning."
+            )
+            .setPositiveButton("OK", null)
+            .show()
     }
 }

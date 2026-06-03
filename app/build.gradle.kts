@@ -24,7 +24,7 @@ android {
         buildConfigField(
             "String",
             "VIRUSTOTAL_API_KEY",
-            "\"${project.findProperty("VIRUSTOTAL_API_KEY")}\""
+            "\"${project.findProperty("VIRUSTOTAL_API_KEY") ?: ""}\""
         )
     }
 

@@ -2,6 +2,7 @@ package com.jorian.cybershield.domain
 
 import com.jorian.cybershield.model.ScanResult
 import com.jorian.cybershield.model.ScanStatus
+import com.jorian.cybershield.utils.UrlUtils
 import java.net.URI
 
 class UrlScannerManager {
@@ -24,6 +25,22 @@ class UrlScannerManager {
 
         val lowerUrl = cleanUrl.lowercase()
         val host = getHost(cleanUrl)
+
+        if (!UrlUtils.isValidUrl(cleanUrl) || host.isBlank()) {
+            return ScanResult(
+                url = cleanUrl,
+                status = ScanStatus.DANGEROUS,
+                message = "Invalid or malformed URL.",
+                reasons = listOf("CyberShield could not identify a valid website domain."),
+                score = 100
+            )
+        }
+
+        val ruleReasons = SuspiciousRules.check(cleanUrl)
+        if (ruleReasons.isNotEmpty()) {
+            score += ruleReasons.size * 8
+            reasons.addAll(ruleReasons)
+        }
 
         if (!cleanUrl.startsWith("https://")) {
             score += 15

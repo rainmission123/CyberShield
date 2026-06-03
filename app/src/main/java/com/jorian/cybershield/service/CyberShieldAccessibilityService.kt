@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import com.jorian.cybershield.data.ScanHistoryRepository
 import com.jorian.cybershield.domain.UrlScannerManager
 import com.jorian.cybershield.model.ScanStatus
 import com.jorian.cybershield.ui.WarningActivity
@@ -16,6 +17,7 @@ import java.util.ArrayList
 class CyberShieldAccessibilityService : AccessibilityService() {
 
     private val scanner = UrlScannerManager()
+    private val historyRepository by lazy { ScanHistoryRepository(this) }
 
     private var lastDetectedUrl: String = ""
     private var lastAlertTime: Long = 0L
@@ -49,6 +51,12 @@ class CyberShieldAccessibilityService : AccessibilityService() {
         ) {
             lastDetectedUrl = result.url
             lastAlertTime = System.currentTimeMillis()
+
+            historyRepository.saveScan(
+                url = result.url,
+                status = result.status,
+                score = result.score
+            )
 
             VibrationHelper.dangerAlert(this)
             AlertSoundHelper.playWarningSound(this)

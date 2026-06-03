@@ -21,11 +21,13 @@ object UrlUtils {
         return try {
             val uri = URI(normalized)
             val scheme = uri.scheme?.lowercase()
-            val host = uri.host
+            val host = uri.host?.lowercase()
 
             (scheme == "http" || scheme == "https") &&
                     !host.isNullOrBlank() &&
-                    host.contains(".")
+                    host.contains(".") &&
+                    !host.startsWith(".") &&
+                    !host.endsWith(".")
         } catch (e: Exception) {
             false
         }

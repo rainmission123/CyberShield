@@ -1,9 +1,7 @@
 package com.jorian.cybershield.domain
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.widget.EditText
 import android.widget.TextView
 import com.jorian.cybershield.data.ScanHistoryRepository
@@ -11,6 +9,7 @@ import com.jorian.cybershield.data.VirusTotalCacheRepository
 import com.jorian.cybershield.model.ScanStatus
 import com.jorian.cybershield.ui.WarningActivity
 import com.jorian.cybershield.utils.AlertSoundHelper
+import com.jorian.cybershield.utils.ExternalUrlOpener
 import com.jorian.cybershield.utils.VibrationHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +36,10 @@ class IncomingLinkHandler(
     private var isScanning = false
 
     fun handle(intent: Intent?) {
-        val incomingUrl = intent?.data?.toString()?.trim()
+        val incomingUrl = when (intent?.action) {
+            Intent.ACTION_SEND -> intent.getStringExtra(Intent.EXTRA_TEXT)
+            else -> intent?.data?.toString()
+        }?.let { extractFirstUrl(it) ?: it.trim() }
 
         if (!incomingUrl.isNullOrEmpty()) {
             etUrl.setText(incomingUrl)
@@ -46,7 +48,8 @@ class IncomingLinkHandler(
     }
 
     fun scanManualInput() {
-        val url = etUrl.text.toString().trim()
+        val rawInput = etUrl.text.toString().trim()
+        val url = extractFirstUrl(rawInput) ?: rawInput
 
         if (url.isEmpty()) {
             tvResult.text = "⚠️ EMPTY URL"
@@ -55,6 +58,23 @@ class IncomingLinkHandler(
         }
 
         scanAndHandle(url)
+    }
+
+    fun cancelOngoingScan() {
+        scanJob?.cancel()
+        scanJob = null
+        isScanning = false
+    }
+
+    private fun extractFirstUrl(text: String): String? {
+        val match = Regex(
+            pattern = """(https?://\S+|www\.\S+)""",
+            option = RegexOption.IGNORE_CASE
+        ).find(text)?.value ?: return null
+
+        return match
+            .trim()
+            .trimEnd('.', ',', ')', ']', '}', '"', '\'')
     }
 
     private fun scanAndHandle(url: String) {
@@ -192,11 +212,9 @@ class IncomingLinkHandler(
     }
 
     private fun openInBrowser(url: String) {
-        try {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            activity.startActivity(browserIntent)
+        if (ExternalUrlOpener.open(activity, url)) {
             activity.finish()
-        } catch (e: ActivityNotFoundException) {
+        } else {
             tvResult.text = "SAFE\n${scanner.scan(url).message}"
             tvReasons.text = "No browser app is available to open this link."
         }

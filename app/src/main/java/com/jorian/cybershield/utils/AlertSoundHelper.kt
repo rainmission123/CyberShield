@@ -28,9 +28,13 @@ object AlertSoundHelper {
 
     fun stopWarningSound() {
 
-        mediaPlayer?.stop()
+        runCatching {
+            mediaPlayer?.stop()
+        }
 
-        mediaPlayer?.release()
+        runCatching {
+            mediaPlayer?.release()
+        }
 
         mediaPlayer = null
     }

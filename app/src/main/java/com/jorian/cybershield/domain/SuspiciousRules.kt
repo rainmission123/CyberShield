@@ -66,7 +66,11 @@ object SuspiciousRules {
             reasons.add("Invalid or missing http/https URL.")
         }
 
-        if (trustedDomains.any { lowerUrl.contains(it) }) {
+        val host = runCatching {
+            java.net.URI(lowerUrl).host.orEmpty()
+        }.getOrDefault("")
+
+        if (trustedDomains.any { host == it || host.endsWith(".$it") }) {
             return reasons
         }
 

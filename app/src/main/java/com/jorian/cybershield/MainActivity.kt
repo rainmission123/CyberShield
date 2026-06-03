@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity() {
         incomingLinkHandler.handle(intent)
     }
 
+    override fun onDestroy() {
+        incomingLinkHandler.cancelOngoingScan()
+        super.onDestroy()
+    }
+
     private fun showCyberShieldMenu() {
         val menuItems = arrayOf(
             "Scan current link",

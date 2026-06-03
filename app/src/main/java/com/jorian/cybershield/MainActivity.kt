@@ -1,18 +1,16 @@
 package com.jorian.cybershield
 
-import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.Settings
-import android.view.Window
-import android.view.WindowManager
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -30,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnScan: Button
     private lateinit var tvResult: TextView
     private lateinit var tvReasons: TextView
+    private lateinit var drawerScrim: View
+    private lateinit var drawerPanel: LinearLayout
 
     private val scanner = UrlScannerManager()
     private lateinit var incomingLinkHandler: IncomingLinkHandler
@@ -47,6 +47,8 @@ class MainActivity : AppCompatActivity() {
         btnScan = findViewById(R.id.btnScan)
         tvResult = findViewById(R.id.tvResult)
         tvReasons = findViewById(R.id.tvReasons)
+        drawerScrim = findViewById(R.id.drawerScrim)
+        drawerPanel = findViewById(R.id.drawerPanel)
 
         incomingLinkHandler = IncomingLinkHandler(
             activity = this,
@@ -73,8 +75,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         tvMenu.setOnClickListener {
-            showCyberShieldMenu()
+            openSideMenu()
         }
+
+        setupSideMenu()
+        setupBackNavigation()
 
         incomingLinkHandler.handle(intent)
     }
@@ -90,37 +95,88 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun showCyberShieldMenu() {
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dialog_cyber_menu)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    private fun setupSideMenu() {
+        drawerPanel.post {
+            val width = (resources.displayMetrics.widthPixels * 0.58f).toInt()
+            drawerPanel.layoutParams = drawerPanel.layoutParams.apply {
+                this.width = width
+            }
+            drawerPanel.translationX = -width.toFloat()
+        }
 
-        dialog.findViewById<TextView>(R.id.menuHistory).setOnClickListener {
-            dialog.dismiss()
+        drawerScrim.setOnClickListener {
+            closeSideMenu()
+        }
+
+        findViewById<TextView>(R.id.menuHistory).setOnClickListener {
+            closeSideMenu()
             openHistory()
         }
 
-        dialog.findViewById<TextView>(R.id.menuRealtime).setOnClickListener {
-            dialog.dismiss()
+        findViewById<TextView>(R.id.menuRealtime).setOnClickListener {
+            closeSideMenu()
             openAccessibilitySettings()
         }
 
-        dialog.findViewById<TextView>(R.id.menuDefault).setOnClickListener {
-            dialog.dismiss()
+        findViewById<TextView>(R.id.menuDefault).setOnClickListener {
+            closeSideMenu()
             openLinkProtectorSettings()
         }
 
-        dialog.findViewById<TextView>(R.id.menuAbout).setOnClickListener {
-            dialog.dismiss()
+        findViewById<TextView>(R.id.menuAbout).setOnClickListener {
+            closeSideMenu()
             showAboutDialog()
         }
+    }
 
-        dialog.show()
-        dialog.window?.setLayout(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
+    private fun setupBackNavigation() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (drawerPanel.visibility == View.VISIBLE) {
+                        closeSideMenu()
+                    } else {
+                        isEnabled = false
+                        onBackPressedDispatcher.onBackPressed()
+                    }
+                }
+            }
         )
+    }
+
+    private fun openSideMenu() {
+        drawerScrim.alpha = 0f
+        drawerScrim.visibility = View.VISIBLE
+        drawerPanel.visibility = View.VISIBLE
+
+        drawerScrim.animate()
+            .alpha(1f)
+            .setDuration(180)
+            .start()
+
+        drawerPanel.animate()
+            .translationX(0f)
+            .setDuration(220)
+            .start()
+    }
+
+    private fun closeSideMenu() {
+        drawerScrim.animate()
+            .alpha(0f)
+            .setDuration(160)
+            .withEndAction {
+                drawerScrim.visibility = View.GONE
+            }
+            .start()
+
+        drawerPanel.animate()
+            .translationX(-drawerPanel.width.toFloat())
+            .setDuration(200)
+            .withEndAction {
+                drawerPanel.visibility = View.GONE
+            }
+            .start()
     }
 
     private fun openHistory() {

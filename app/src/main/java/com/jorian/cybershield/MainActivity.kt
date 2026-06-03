@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnSetDefault.setOnClickListener {
-            openDefaultBrowserSettings()
+            openLinkProtectorSettings()
         }
 
         tvMenu.setOnClickListener {
@@ -96,39 +96,29 @@ class MainActivity : AppCompatActivity() {
         dialog.setContentView(R.layout.dialog_cyber_menu)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        dialog.findViewById<Button>(R.id.menuScan).setOnClickListener {
-            dialog.dismiss()
-            incomingLinkHandler.scanManualInput()
-        }
-
-        dialog.findViewById<Button>(R.id.menuHistory).setOnClickListener {
+        dialog.findViewById<TextView>(R.id.menuHistory).setOnClickListener {
             dialog.dismiss()
             openHistory()
         }
 
-        dialog.findViewById<Button>(R.id.menuRealtime).setOnClickListener {
+        dialog.findViewById<TextView>(R.id.menuRealtime).setOnClickListener {
             dialog.dismiss()
             openAccessibilitySettings()
         }
 
-        dialog.findViewById<Button>(R.id.menuDefault).setOnClickListener {
+        dialog.findViewById<TextView>(R.id.menuDefault).setOnClickListener {
             dialog.dismiss()
-            openDefaultBrowserSettings()
+            openLinkProtectorSettings()
         }
 
-        dialog.findViewById<Button>(R.id.menuClear).setOnClickListener {
-            dialog.dismiss()
-            clearCurrentScan()
-        }
-
-        dialog.findViewById<Button>(R.id.menuAbout).setOnClickListener {
+        dialog.findViewById<TextView>(R.id.menuAbout).setOnClickListener {
             dialog.dismiss()
             showAboutDialog()
         }
 
         dialog.show()
         dialog.window?.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT
         )
     }
@@ -143,6 +133,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun openDefaultBrowserSettings() {
         openSettings(Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS))
+    }
+
+    private fun openLinkProtectorSettings() {
+        Toast.makeText(
+            this,
+            "Tap Browser app, then choose CyberShield.",
+            Toast.LENGTH_LONG
+        ).show()
+        openDefaultBrowserSettings()
     }
 
     private fun openSettings(intent: Intent) {
